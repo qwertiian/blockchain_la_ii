@@ -14,8 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Next.js + Privy Auth",
-  description: "Web3 authentication powered by Privy",
+  title: "Ramesh's Bakery | The Loyalty Card That Can't Be Copied",
+  description:
+    "Digital punch card loyalty app for morning bread buyers. Zero crypto jargon, embedded self-custodial wallets on Base Sepolia, and unforgeable server-verified stamps.",
 };
 
 export default function RootLayout({

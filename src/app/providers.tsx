@@ -1,8 +1,9 @@
 'use client';
 
 import { PrivyProvider } from '@privy-io/react-auth';
+import { baseSepolia } from 'viem/chains';
 
-// Privy App IDs are required to be a 25-character string (e.g. clxxxxxxxxxxxxxxxxxxxxxxx)
+// Privy App IDs are required to be a 25-character string (e.g. cmto0awjx005s0bl6wksf3t7u)
 const FALLBACK_APP_ID = 'cl00000000000000000000000';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
@@ -13,14 +14,20 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     <PrivyProvider
       appId={appId}
       config={{
+        defaultChain: baseSepolia,
+        supportedChains: [baseSepolia],
         appearance: {
-          theme: 'dark',
-          accentColor: '#6366f1',
-          logo: 'https://auth.privy.io/logos/privy-logo.png',
-          walletList: ['metamask', 'coinbase_wallet', 'rainbow', 'wallet_connect'],
+          theme: 'light',
+          accentColor: '#b45309', // Warm artisan amber
+          logo: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=128&auto=format&fit=crop&q=80',
+          showWalletLoginFirst: false, // Ensure external wallet is NOT the primary path
+          walletList: ['detected_wallets'],
         },
+        // Tailored for bakery queue: email & Google (no browser extensions required)
+        loginMethods: ['email', 'google'],
         embeddedWallets: {
           ethereum: {
+            // Automatically provision an embedded wallet on login without user click
             createOnLogin: 'users-without-wallets',
           },
         },
