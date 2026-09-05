@@ -71,29 +71,29 @@ export default function StaffCounterModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-md rounded-3xl bg-neutral-900 border border-neutral-800 p-6 sm:p-7 shadow-2xl space-y-5 text-neutral-100 relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="w-full max-w-md rounded-3xl bg-zinc-900 border border-zinc-800 p-6 sm:p-7 shadow-2xl space-y-5 text-zinc-100 relative">
         {/* Close Button */}
         <button
           onClick={onClose}
           disabled={isLoading}
-          className="absolute top-5 right-5 text-neutral-400 hover:text-white text-lg font-bold p-1 cursor-pointer transition disabled:opacity-40"
+          className="absolute top-5 right-5 text-zinc-400 hover:text-white text-lg font-bold p-1 cursor-pointer transition disabled:opacity-40"
         >
           ✕
         </button>
 
         {/* Modal Header */}
         <div className="space-y-1.5">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[11px] font-mono font-medium">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-zinc-800 text-amber-300 text-[11px] font-mono font-medium">
             <span>🥖</span> Staff Counter Action
           </div>
-          <h3 className="text-xl font-bold text-white tracking-tight">Award Official Stamp</h3>
-          <p className="text-xs text-neutral-400 leading-relaxed">
-            Staff enters their counter PIN to sign and verify an unforgeable stamp for this customer.
+          <h3 className="text-lg font-bold text-white tracking-tight">Award Official Stamp</h3>
+          <p className="text-xs text-zinc-400 leading-relaxed">
+            Staff enters counter PIN to verify and stamp this customer&apos;s digital card.
           </p>
         </div>
 
-        {/* Error Alert (Honest dull state) */}
+        {/* Error Alert */}
         {error && (
           <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-start gap-2">
             <span className="text-sm">⚠️</span>
@@ -116,8 +116,8 @@ export default function StaffCounterModal({
         <form onSubmit={handleAwardStamp} className="space-y-4">
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-medium text-neutral-300">Staff Counter PIN</label>
-              <span className="text-[10px] font-mono text-neutral-500">Default PIN: 1234</span>
+              <label className="text-xs font-medium text-zinc-300">Staff Counter PIN</label>
+              <span className="text-[10px] font-mono text-zinc-500">Default: 1234</span>
             </div>
             <input
               type="password"
@@ -127,7 +127,7 @@ export default function StaffCounterModal({
               onChange={(e) => setPin(e.target.value)}
               disabled={isLoading}
               autoFocus
-              className="w-full px-4 py-3 rounded-xl bg-neutral-950 border border-neutral-800 text-center font-mono text-lg tracking-widest text-white placeholder-neutral-700 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition disabled:opacity-50"
+              className="w-full px-4 py-3 rounded-xl bg-zinc-950 border border-zinc-800 text-center font-mono text-lg tracking-widest text-white placeholder-zinc-700 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition disabled:opacity-50"
             />
           </div>
 
@@ -136,18 +136,18 @@ export default function StaffCounterModal({
               type="button"
               onClick={onClose}
               disabled={isLoading}
-              className="flex-1 py-3 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-300 font-medium text-xs transition cursor-pointer border border-neutral-700/80 disabled:opacity-40"
+              className="flex-1 py-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-medium text-xs transition cursor-pointer border border-zinc-700/80 disabled:opacity-40"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isLoading || !pin.trim()}
-              className="flex-1 py-3 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold text-xs tracking-wide transition shadow-lg shadow-amber-600/25 disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2 active:scale-98"
+              className="flex-1 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-zinc-950 font-bold text-xs tracking-wide transition shadow-lg shadow-amber-500/20 disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2 active:scale-98"
             >
               {isLoading ? (
                 <>
-                  <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span className="w-3.5 h-3.5 border-2 border-zinc-950/30 border-t-zinc-950 rounded-full animate-spin" />
                   <span>Stamping...</span>
                 </>
               ) : (

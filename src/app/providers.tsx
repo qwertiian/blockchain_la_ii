@@ -17,14 +17,14 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         defaultChain: baseSepolia,
         supportedChains: [baseSepolia],
         appearance: {
-          theme: 'light',
-          accentColor: '#b45309', // Warm artisan amber
+          theme: 'dark',
+          accentColor: '#f59e0b', // Vibrant warm gold
           logo: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=128&auto=format&fit=crop&q=80',
           showWalletLoginFirst: false, // Ensure external wallet is NOT the primary path
           walletList: ['detected_wallets'],
         },
-        // Tailored for bakery queue: email & Google (no browser extensions required)
-        loginMethods: ['email', 'google'],
+        // Fast, reliable email OTP login tailored for the morning queue
+        loginMethods: ['email'],
         embeddedWallets: {
           ethereum: {
             // Automatically provision an embedded wallet on login without user click

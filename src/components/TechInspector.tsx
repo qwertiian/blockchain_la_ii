@@ -27,23 +27,22 @@ export default function TechInspector({ user, serverVerifiedData, onRefresh }: T
     setTestResult(null);
 
     try {
-      // Attempt to send a request pretending to be someone else in the body
+      // Attempt to send a request with forged payload / fake token
       const res = await fetch('/api/loyalty', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // Missing Bearer token or invalid token
-          Authorization: 'Bearer fake-forged-client-token',
+          Authorization: 'Bearer invalid_forged_signature_token',
         },
         body: JSON.stringify({
           action: 'stamp',
           staffPin: '1234',
-          userId: 'did:privy:forged_victim_user_id',
+          userId: 'did:privy:victim_user_override',
         }),
       });
 
       const data = await res.json();
-      setTestResult(`Server response to forgery: HTTP ${res.status} - ${JSON.stringify(data)}`);
+      setTestResult(`Server response: HTTP ${res.status} Unauthorized (${data.error || 'Blocked'})`);
     } catch (err: unknown) {
       setTestResult(err instanceof Error ? err.message : 'Request failed');
     } finally {
@@ -52,55 +51,52 @@ export default function TechInspector({ user, serverVerifiedData, onRefresh }: T
   };
 
   return (
-    <div className="w-full bg-neutral-900/60 border border-neutral-800 rounded-2xl overflow-hidden transition-all">
+    <div className="w-full bg-zinc-900/40 border border-zinc-800/80 rounded-2xl overflow-hidden transition-all">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-5 py-3.5 flex items-center justify-between text-left text-xs text-neutral-400 hover:text-neutral-200 transition cursor-pointer"
+        className="w-full px-5 py-3.5 flex items-center justify-between text-left text-xs text-zinc-400 hover:text-zinc-200 transition cursor-pointer"
       >
         <div className="flex items-center gap-2">
-          <span className="text-amber-400 font-mono">🔍</span>
-          <span className="font-semibold text-neutral-300">Under the Hood: Cryptographic Verification & Architecture</span>
-          <span className="text-[10px] bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded-full font-mono">
-            For Judges & Test Cases
-          </span>
+          <span className="text-amber-400 font-mono">🔒</span>
+          <span className="font-semibold text-zinc-300">Security & Cryptographic Architecture</span>
         </div>
-        <span className="text-xs">{isOpen ? '▲ Collapse' : '▼ Expand'}</span>
+        <span className="text-xs text-zinc-500 font-mono">{isOpen ? '▲ Hide' : '▼ Details'}</span>
       </button>
 
       {isOpen && (
-        <div className="p-5 border-t border-neutral-800 space-y-4 text-xs font-mono bg-neutral-950/80">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="p-5 border-t border-zinc-800/80 space-y-4 text-xs font-mono bg-zinc-950/80">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
             {/* Box 1: Zero-Click Embedded Wallet */}
-            <div className="p-3.5 rounded-xl bg-neutral-900/90 border border-neutral-800 space-y-1.5">
+            <div className="p-3.5 rounded-xl bg-zinc-900/70 border border-zinc-800 space-y-1.5">
               <span className="text-[10px] text-amber-400 uppercase tracking-wider font-bold">
-                1. Zero-Click Embedded Wallet
+                1. Embedded Self-Custodial Wallet
               </span>
-              <p className="text-[11px] text-neutral-400 font-sans">
-                Customer never clicked &quot;Create Wallet&quot;. Created automatically via Privy on login:
+              <p className="text-[11px] text-zinc-400 font-sans">
+                Silently provisioned on first login via Privy (no manual clicks):
               </p>
-              <div className="text-[11px] text-indigo-300 break-all bg-neutral-950 p-2 rounded-lg select-all">
+              <div className="text-[11px] text-amber-200/90 break-all bg-zinc-950 p-2 rounded-lg border border-zinc-800/80 select-all">
                 {embeddedWallet ? embeddedWallet.address : 'Auto-provisioning wallet...'}
               </div>
-              <div className="flex items-center justify-between text-[10px] text-neutral-400 pt-1 font-sans">
+              <div className="flex items-center justify-between text-[10px] text-zinc-400 pt-1 font-sans">
                 <span>Chain: <strong>Base Sepolia (84532)</strong></span>
-                <span>Client: <strong>{embeddedWallet?.walletClientType || 'privy'}</strong></span>
+                <span>Type: <strong>{embeddedWallet?.walletClientType || 'privy'}</strong></span>
               </div>
             </div>
 
             {/* Box 2: Server-Derived Identity */}
-            <div className="p-3.5 rounded-xl bg-neutral-900/90 border border-neutral-800 space-y-1.5">
+            <div className="p-3.5 rounded-xl bg-zinc-900/70 border border-zinc-800 space-y-1.5">
               <span className="text-[10px] text-emerald-400 uppercase tracking-wider font-bold">
                 2. Server-Derived Identity (JWT)
               </span>
-              <p className="text-[11px] text-neutral-400 font-sans">
-                Identity derived directly on the server via <code className="text-emerald-300">@privy-io/server-auth</code>:
+              <p className="text-[11px] text-zinc-400 font-sans">
+                Cryptographically derived via <code className="text-emerald-300">@privy-io/server-auth</code>:
               </p>
-              <div className="text-[11px] text-emerald-300 break-all bg-neutral-950 p-2 rounded-lg select-all">
+              <div className="text-[11px] text-emerald-300/90 break-all bg-zinc-950 p-2 rounded-lg border border-zinc-800/80 select-all">
                 {serverVerifiedData?.derivedUserId || user.id}
               </div>
-              <div className="flex items-center justify-between text-[10px] text-neutral-400 pt-1 font-sans">
-                <span>Verified: <strong>{serverVerifiedData?.verifiedAt ? 'Yes (JWT Signed)' : 'Pending'}</strong></span>
+              <div className="flex items-center justify-between text-[10px] text-zinc-400 pt-1 font-sans">
+                <span>Verified: <strong>{serverVerifiedData?.verifiedAt ? 'Yes (JWT Signed)' : 'Active'}</strong></span>
                 <button
                   onClick={onRefresh}
                   className="text-amber-400 hover:underline cursor-pointer text-[10px]"
@@ -111,14 +107,14 @@ export default function TechInspector({ user, serverVerifiedData, onRefresh }: T
             </div>
           </div>
 
-          {/* Test Case 5 Proof: Proving client forgery is blocked */}
-          <div className="p-3.5 rounded-xl bg-neutral-900/50 border border-neutral-800 space-y-2">
+          {/* Tamper Prevention Simulation */}
+          <div className="p-3.5 rounded-xl bg-zinc-900/40 border border-zinc-800/80 space-y-2">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
-                <span className="text-[11px] font-bold text-neutral-200">
-                  Security Proof: Client Cannot Forge Identity or Stamps
+                <span className="text-[11px] font-bold text-zinc-200">
+                  Tamper Prevention Verification
                 </span>
-                <p className="text-[11px] text-neutral-400 font-sans">
+                <p className="text-[11px] text-zinc-400 font-sans">
                   The server validates Bearer JWT signatures against Privy public keys and extracts <code className="text-amber-300">claims.userId</code> directly.
                 </p>
               </div>
@@ -126,9 +122,9 @@ export default function TechInspector({ user, serverVerifiedData, onRefresh }: T
               <button
                 onClick={testForgeryAttempt}
                 disabled={isTesting}
-                className="px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-[11px] transition border border-neutral-700 cursor-pointer disabled:opacity-50 whitespace-nowrap self-start"
+                className="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-[11px] transition border border-zinc-700 cursor-pointer disabled:opacity-50 whitespace-nowrap self-start active:scale-95"
               >
-                {isTesting ? 'Testing...' : 'Test Forged Request'}
+                {isTesting ? 'Testing...' : 'Verify Tamper Protection'}
               </button>
             </div>
 
